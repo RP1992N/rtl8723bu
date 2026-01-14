@@ -1,3 +1,5 @@
+EDIT: thank to ChatGPT for helping me fix some error.
+
 rtl8723bu for linux
 ===================
 
