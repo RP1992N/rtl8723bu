@@ -21,6 +21,16 @@ EXTRA_CFLAGS += -I$(src)/hal/phydm
 
 EXTRA_LDFLAGS += --strip-debug
 
+######################### ANDROID ############################
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_ANDROID
+EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
+EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211
+EXTRA_CFLAGS += -DCONFIG_CFG80211
+EXTRA_CFLAGS += -DCONFIG_WIRELESS_EXT
+EXTRA_CFLAGS += -DCONFIG_WIFI_MONITOR
+EXTRA_CFLAGS += -DCONFIG_PACKET_INJECTION
+EXTRA_CFLAGS += -DANDROID
+
 ########################## WIFI IC ############################
 CONFIG_RTL8723B = y
 ######################### Interface ###########################
@@ -48,7 +58,8 @@ CONFIG_WIFI_MONITOR = y
 ######### Notify SDIO Host Keep Power During Syspend ##########
 CONFIG_RTW_SDIO_PM_KEEP_POWER = y
 ###################### Platform Related #######################
-CONFIG_PLATFORM_I386_PC = y
+CONFIG_PLATFORM_I386_PC = n
+CONFIG_PLATFORM_ARM64 = y
 ###############################################################
 
 CONFIG_DRVEXT_MODULE = n
@@ -241,15 +252,15 @@ endif
 EXTRA_CFLAGS += -DDM_ODM_SUPPORT_TYPE=0x04
 
 ifeq ($(CONFIG_PLATFORM_I386_PC), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
-EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
-SUBARCH := $(shell uname -m | sed -e s/i.86/i386/)
-ARCH ?= $(SUBARCH)
-CROSS_COMPILE ?=
-KVER  := $(shell uname -r)
-KSRC := /lib/modules/$(KVER)/build
-MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
-INSTALL_PREFIX :=
+#EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
+#EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
+#SUBARCH := $(shell uname -m | sed -e s/i.86/i386/)
+#ARCH ?= $(SUBARCH)
+#CROSS_COMPILE ?=
+#KVER  := $(shell uname -r)
+#KSRC := /lib/modules/$(KVER)/build
+#MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
+#INSTALL_PREFIX :=
 endif
 
 USER_MODULE_NAME ?=
@@ -300,7 +311,7 @@ obj-$(CONFIG_RTL8723BU) := $(MODULE_NAME).o
 
 else
 
-export CONFIG_RTL8723BU = m
+export CONFIG_RTL8723BU = y
 
 all: modules
 

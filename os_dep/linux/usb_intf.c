@@ -235,10 +235,38 @@ struct rtw_usb_drv {
 	u8 hw_type;
 };
 
+static void usb_dvobj_deinit(struct usb_interface *usb_intf);
+
+static void rtw_usb_disconnect_safe(struct usb_interface *intf)
+{
+	struct dvobj_priv *dvobj = usb_get_intfdata(intf);
+	_adapter *padapter = NULL;
+
+	DBG_871X("%s\n", __func__);
+
+	if (!dvobj)
+		return;
+
+	padapter = dvobj->padapters ? dvobj->padapters[IFACE_ID0] : NULL;
+
+	usb_set_intfdata(intf, NULL);
+
+	if (padapter) {
+		rtw_set_drv_stopped(padapter);
+		rtw_stop_cmd_thread(padapter);
+	}
+
+	msleep(50);
+
+	/* USB cleanup only */
+	usb_dvobj_deinit(intf);
+}
+
 struct rtw_usb_drv usb_drv = {
 	.usbdrv.name =(char*)DRV_NAME,
 	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
+	/*.usbdrv.disconnect = rtw_dev_remove,*/
+	.usbdrv.disconnect = rtw_usb_disconnect_safe,
 	.usbdrv.id_table = rtw_usb_id_tbl,
 	.usbdrv.suspend =  rtw_suspend,
 	.usbdrv.resume = rtw_resume,
@@ -252,7 +280,8 @@ struct rtw_usb_drv usb_drv = {
 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 19))
 	.usbdrv.drvwrap.driver.shutdown = rtw_dev_shutdown,
 	#else
-	.usbdrv.driver.shutdown = rtw_dev_shutdown,
+	/*.usbdrv.driver.shutdown = rtw_dev_shutdown,*/
+	.usbdrv.driver.shutdown = NULL,
 	#endif
 };
 

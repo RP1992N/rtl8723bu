@@ -6522,8 +6522,8 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 	.stop_ap = cfg80211_rtw_stop_ap,
 	#endif
 	
-	.add_station = cfg80211_rtw_add_station,
-	.del_station = cfg80211_rtw_del_station,
+	//.add_station = cfg80211_rtw_add_station,
+	//.del_station = cfg80211_rtw_del_station,
 	.change_station = cfg80211_rtw_change_station,
 	.dump_station = cfg80211_rtw_dump_station,
 	.change_bss = cfg80211_rtw_change_bss,

@@ -21,7 +21,12 @@
 #define __OSDEP_SERVICE_H_
 
 #include <linux/signal.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0)
 #include <linux/sched/signal.h>
+#else
+#include <linux/sched.h>
+#endif
 
 #define _FAIL		0
 #define _SUCCESS	1
@@ -35,7 +40,13 @@
 #define _FALSE		0
 
 #include <linux/signal.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0)
 #include <linux/sched/signal.h>
+#else
+#include <linux/sched.h>
+#endif
+
 
 #ifdef PLATFORM_FREEBSD
 #include <osdep_service_bsd.h>
