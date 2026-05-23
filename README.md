@@ -1,4 +1,4 @@
-EDIT: thank to ChatGPT for helping me fix some error.
+EDIT: I use ChatGPT for fixing some error.
 
 rtl8723bu for linux
 ===================
